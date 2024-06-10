@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:community_app/providers/posts_provider.dart';
 import 'dart:io';
 
-//게시물의 상세화면과 댓글 작성하는 기능 제공
-
 class PostScreen extends StatelessWidget {
   final String postId;
 
@@ -42,29 +40,67 @@ class PostScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(post.details),
-            if (post.imageUrl.isNotEmpty) Image.file(File(post.imageUrl)),
-            Divider(),
+            Text(
+              post.details,
+              style: TextStyle(fontSize: 18),
+            ),
             Expanded(
-              child: ListView.builder(
-                itemCount: post.comments.length,
-                itemBuilder: (context, index) {
-                  final comment = post.comments[index];
-                  return ListTile(
-                    title: Text(comment.text),
-                  );
-                },
+              child: ListView(
+                children: [
+                  if (post.imageUrls.isNotEmpty)
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: post.imageUrls.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemBuilder: (context, index) {
+                        return Image.file(File(post.imageUrls[index]),
+                            fit: BoxFit.cover);
+                      },
+                    ),
+                  Divider(),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: post.comments.length,
+                    itemBuilder: (context, index) {
+                      final comment = post.comments[index];
+                      return Column(
+                        children: [
+                          ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 0.0, horizontal: 8.0),
+                            title: Text(comment.text),
+                          ),
+                          Divider(height: 1),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-            TextField(
-              controller: _commentController,
-              decoration: InputDecoration(
-                labelText: 'Add a comment',
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.send),
-              onPressed: _addComment,
+            Divider(), // 댓글 입력 필드 위에 구분선 추가
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _commentController,
+                    decoration: InputDecoration(
+                      labelText: 'Add a comment',
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send),
+                  onPressed: _addComment,
+                ),
+              ],
             ),
           ],
         ),

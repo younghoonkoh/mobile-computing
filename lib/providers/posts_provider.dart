@@ -8,14 +8,14 @@ class Post {
   String title;
   String id;
   String details;
-  String imageUrl;
+  List<String> imageUrls;
   List<Comment> comments;
 
   Post(
       {required this.title,
       required this.id,
       required this.details,
-      required this.imageUrl,
+      required this.imageUrls,
       required this.comments});
 }
 

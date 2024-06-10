@@ -38,9 +38,13 @@ class HomeScreen extends StatelessWidget {
               return ListTile(
                 title: Text(post.title),
                 subtitle: Text(post.id),
-                leading: post.imageUrl.isNotEmpty
-                    ? Image.file(File(post.imageUrl),
-                        width: 50, height: 50, fit: BoxFit.cover)
+                leading: post.imageUrls.isNotEmpty
+                    ? Image.file(
+                        File(post.imageUrls.first), // 첫 번째 이미지를 표시
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                      )
                     : null, //사진 첨부
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
